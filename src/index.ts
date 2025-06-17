@@ -15,12 +15,14 @@ const allowedOrigins = [
   "http://localhost:5173",
 ];
 
-app.use(
+app.options(
+  "*",
   cors({
     origin: allowedOrigins,
-    credentials: true, // optional
+    credentials: true,
   })
 );
+
 app.use(express.json());
 
 app.use("/api/suplimax", suplimaxRoutes);
