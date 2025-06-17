@@ -15,13 +15,11 @@ const allowedOrigins = [
   "http://localhost:5173",
 ];
 
-app.options(
-  "*",
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+// ✅ CORS before all routes
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
 app.use(express.json());
 
@@ -30,5 +28,5 @@ app.use("/api/real-estate", realEstateRoutes);
 app.use("/api/download", downloadRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
