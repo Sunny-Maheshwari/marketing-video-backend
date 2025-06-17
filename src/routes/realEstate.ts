@@ -3,29 +3,28 @@ import { generateGeminiVideo } from "../services/gemini";
 
 const router = express.Router();
 
-router.post("/", async (req: any, res: any) => {
-    const { style, property } = req.body;
+router.post("/", async (req, res) => {
+  const { location, features, audience, tone, style } = req.body;
 
-    const prompt = `Generate a ${style} style video tour for this real estate listing:
-Address: ${property.address}
-  useCase: "real-estate",
-Price: ${property.price}
-Bedrooms: ${property.bedrooms}
-Bathrooms: ${property.bathrooms}
-Square Footage: ${property.sqft}
-Features: ${property.features}
-Narrate a compelling walkthrough with cinematic visuals.`;
+  const prompt = `Create a 30-second real estate promotional video for a property in ${location}.
+Highlight features: ${features}.
+Style: ${style}
+Target Audience: ${audience}
+Tone: ${tone}
+Include suitable visuals and upbeat background music.`;
 
-    try {
-        const videoUrl = await generateGeminiVideo(prompt, {
-            useCase: "real-estate",
-            style,
-        });
-        return res.json({ videoUrl });
-    } catch (err) {
-        console.error("Error in /real-estate:", err);
-        return res.status(500).json({ message: "Video generation failed" });
-    }
+  try {
+    const videoUrl = await generateGeminiVideo(prompt, {
+      useCase: "real-estate",
+      tone,
+      style,
+    });
+
+    res.json({ videoUrl });
+  } catch (error) {
+    console.error("Error generating video:", error);
+    res.status(500).json({ error: "Failed to generate real estate video." });
+  }
 });
 
 export default router;
